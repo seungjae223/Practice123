@@ -1,25 +1,75 @@
-import logo from './logo.svg';
+import React from "react";
 import './App.css';
+import { AnimatePresence, motion } from "framer-motion";
+import { Route, Routes, useLocation, BrowserRouter as Router } from "react-router-dom";
+// import Navbar from "./jsx/Header";
+// import Home from "./jsx/Home";
+import PerformDetail from "./jsx/PerformDetail";
+// import Food from "./jsx/Food";
 
-function App() {
+const pageVariants = {
+  initial: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeInOut",
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      duration: 0.3,
+      ease: "easeInOut",
+    },
+  },
+};
+
+const AnimatedRoutes = () => {
+  const location = useLocation();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/"
+          element={
+            <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+              <Home />
+            </motion.div>
+          }
+        />
+        <Route
+          path="/perform"
+          element={
+            <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+              <Perform />
+            </motion.div>
+          }
+        />
+        <Route
+          path="/food"
+          element={
+            <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+              <Food />
+            </motion.div>
+          }
+        />
+      </Routes>
+    </AnimatePresence>
   );
-}
+};
+
+const App = () => {
+  return (
+    <Router>
+      <Header />
+      <AnimatedRoutes />
+    </Router>
+  );
+};
 
 export default App;
